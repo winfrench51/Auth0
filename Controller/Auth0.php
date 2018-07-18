@@ -24,8 +24,8 @@ use Magento\Framework\View\Result\PageFactory;
 use DavidUmoh\Auth0\Factory\Auth0ClientFactory;
 use Riskio\OAuth2\Client\Provider\Auth0 as Auth0Client;
 
-abstract class Auth0 extends Auth {
-
+abstract class Auth0 extends Auth
+{
     private $config;
     private $code;
     protected $auth0ClientFactory;
@@ -34,8 +34,7 @@ abstract class Auth0 extends Auth {
     protected $customerRepository;
     protected $authorizeParams = [];
 
-    public function __construct
-    (
+    public function __construct(
         Context $context,
         AuthInterface $authModel,
         CustomerFactory $customerFactory,
@@ -45,9 +44,8 @@ abstract class Auth0 extends Auth {
         Auth0ClientFactory $auth0ClientFactory,
         Config $config,
         PageFactory $pageFactory
-    )
-    {
-        parent::__construct($context,$authModel,$session,$redirect);
+    ) {
+        parent::__construct($context, $authModel, $session, $redirect);
         $this->auth0ClientFactory = $auth0ClientFactory;
         $this->config = $config;
         $this->pageFactory = $pageFactory;
@@ -56,27 +54,27 @@ abstract class Auth0 extends Auth {
         $this->initClient();
     }
 
-    protected function initClient(){
+    protected function initClient()
+    {
         $options = [
             'clientId'=>$this->config->getClientId(),
             'clientSecret'=>$this->config->getClientSecret(),
             'redirectUri'=>$this->config->getCallbackUrl(),
             'account'=>$this->config->getAccount()
         ];
-        if($this->config->getSilentAuth()){
+        if ($this->config->getSilentAuth()) {
             $this->authorizeParams['prompt'] = 'none';
         }
         $this->client = new Auth0Client($options);
     }
 
-    protected function getCustomer(ResourceOwnerInterface $resourceOwner){
-
-        //After logging in or Creating a new USER, redirect to the appropriate location
+    protected function getCustomer(ResourceOwnerInterface $resourceOwner)
+    {
         $this->setRedirectURL();
-        try{
+        try {
             $email = $this->getEmail($resourceOwner);
-            $customer = $this->customerRepository->get($email) ;
-        }catch (NoSuchEntityException $e){
+            $customer = $this->customerRepository->get($email);
+        } catch (NoSuchEntityException $e) {
             $newCustomer = $this->customerFactory->create();
             $newCustomer->setEmail($email);
             $name = $this->getName($resourceOwner);
@@ -90,41 +88,45 @@ abstract class Auth0 extends Auth {
         return $customer;
     }
 
-    protected function getError(){
+    protected function getError()
+    {
         return $this->getRequest()->getParam('error');
     }
 
-    protected function getName(ResourceOwnerInterface $resourceOwner) {
+    protected function getName(ResourceOwnerInterface $resourceOwner)
+    {
         $configValue = $this->config->getNameLocationFormat();
-        return $this->getResourceValueByDotNotation($resourceOwner,$configValue);
+        return $this->getResourceValueByDotNotation($resourceOwner, $configValue);
     }
 
-    protected function getEmail(ResourceOwnerInterface $resourceOwner){
+    protected function getEmail(ResourceOwnerInterface $resourceOwner)
+    {
         $configValue = $this->config->getEmailLocationFormat();
-        return $this->getResourceValueByDotNotation($resourceOwner,$configValue);
+        return $this->getResourceValueByDotNotation($resourceOwner, $configValue);
     }
 
-    protected function getResourceValueByDotNotation($resourceOwner, $configValue){
+    protected function getResourceValueByDotNotation($resourceOwner, $configValue)
+    {
         $format = explode("#", $configValue);
-        if(count($format) === 1) {
+        if (count($format) === 1) {
             return $resourceOwner->toArray()[$format[0]];
         }
-        
+
         $resources = $resourceOwner->toArray();
-        
+
         for ($i = 0; $i < count($format); $i++) {
-            if(array_key_exists($format[$i], $resources)) {
+            if (array_key_exists($format[$i], $resources)){
                 $resources = $resources[$format[$i]];
             }
         }
         return $resources;
     }
 
-    protected function setRedirectURL() {
+    protected function setRedirectURL()
+    {
         $redirectURL = $this->config->getSuccessLoginRedirectURL();
-        if(!empty($redirectURL)) {
+        if (!empty($redirectURL)) {
             $this->redirectUrl = $redirectURL;
         }
     }
-
 }

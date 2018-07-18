@@ -11,26 +11,23 @@ namespace DavidUmoh\Auth0\Controller\Auth0;
 
 use DavidUmoh\Auth0\Controller\Auth0;
 
-class Index extends Auth0{
-
+class Index extends Auth0
+{
     public function execute()
     {
-        try{
-
+        try {
             $code = $this->getAccessCode();
             $error = $this->getError();
-            if($error && $error === 'login_required'){
-               unset($this->authorizeParams['prompt']);
+            if ($error && $error === 'login_required') {
+                unset($this->authorizeParams['prompt']);
             }
-            if(is_null($code)){
+            if ($code === null) {
                 $this->getAuthClient()->authorize($this->authorizeParams);
             }
             $userDetails = $this->getAuthClient()
                 ->getResourceOwner($this->getAccessToken($code));
-
             return $this->authenticate($this->getCustomer($userDetails));
-
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             return $this->pageFactory->create();
         }

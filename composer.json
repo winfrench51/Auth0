@@ -13,7 +13,7 @@
     ],
     "require": {
         "riskio/oauth2-auth0": "^2.0",
-        "gloo/module-sso": "@stable",
+        "gloo/module-sso": "^0.1.2",
         "magento/module-backend": ">100.0",
         "magento/module-eav": ">100.0",
         "magento/module-config": ">100.0",

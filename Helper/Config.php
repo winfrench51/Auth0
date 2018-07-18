@@ -3,9 +3,8 @@ namespace DavidUmoh\Auth0\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 
-
-class Config extends AbstractHelper{
-
+class Config extends AbstractHelper
+{
     const CONFIG_PATH = 'auth0_sso_config/general/';
     const CLIENT_ID = 'client_id';
     const CLIENT_SECRET = 'client_secret';
@@ -19,7 +18,8 @@ class Config extends AbstractHelper{
     const LINK_SELECTOR = "link_selector";
     const AUTH_REDIRECT_URL_LOGIN = "redirect_url_after_login";
 
-    protected function getModuleConfig($path){
+    protected function getModuleConfig($path)
+    {
         return $this->scopeConfig->getValue(self::CONFIG_PATH.$path);
     }
 
@@ -27,7 +27,8 @@ class Config extends AbstractHelper{
      * Get Auth0 Client Id
      * @return string
      */
-    public function getClientId(){
+    public function getClientId()
+    {
         return $this->getModuleConfig(self::CLIENT_ID);
     }
 
@@ -35,7 +36,8 @@ class Config extends AbstractHelper{
      * Get Client Secret
      * @return string
      */
-    public function getClientSecret(){
+    public function getClientSecret()
+    {
         return $this->getModuleConfig(self::CLIENT_SECRET);
     }
 
@@ -43,7 +45,8 @@ class Config extends AbstractHelper{
      * Get Auth0 domain
      * @return string
      */
-    public function getDomain(){
+    public function getDomain()
+    {
         return $this->getModuleConfig(self::AUTH0_ACCOUNT).'.auth0.com';
     }
 
@@ -51,7 +54,8 @@ class Config extends AbstractHelper{
      * Get Auth0 Group ID
      * @return string
      */
-    public function getDefaultGroupID(){
+    public function getDefaultGroupID()
+    {
         return $this->getModuleConfig(self::AUTH_GROUP_ID);
     }
 
@@ -59,38 +63,44 @@ class Config extends AbstractHelper{
      * Get url to be redirected to after authentication
      * @return string
      */
-    public function getCallbackUrl(){
+    public function getCallbackUrl()
+    {
         return $this->getModuleConfig(self::CALLBACK_URL);
     }
 
-    public function getAccount(){
+    public function getAccount()
+    {
         return $this->getModuleConfig(self::AUTH0_ACCOUNT);
     }
-    public function getSilentAuth(){
+    public function getSilentAuth()
+    {
         return (bool) $this->getModuleConfig(self::SILENT_AUTH);
     }
 
-    public function getNameLocationFormat() {
+    public function getNameLocationFormat()
+    {
         return $this->getModuleConfig(self::AUTH_NAME_FORMAT);
     }
-    
-    public function getEmailLocationFormat() {
+
+    public function getEmailLocationFormat()
+    {
         return $this->getModuleConfig(self::AUTH_EMAIL_FORMAT);
     }
 
-    public function getSuccessLoginRedirectURL() {
+    public function getSuccessLoginRedirectURL()
+    {
         return $this->getModuleConfig(self::AUTH_REDIRECT_URL_LOGIN);
     }
 
-    public function getScope() {
+    public function getScope()
+    {
         return $this->getModuleConfig(self::OAUTH_SCOPE);
     }
 
-    public function getLinkSelector() {
+    public function getLinkSelector()
+    {
         return $this->getModuleConfig(self::LINK_SELECTOR);
     }
-
-
 
     /**
      * Returns a class of Config options that can be easily json encoded for use in javascript.
@@ -103,7 +113,8 @@ class Config extends AbstractHelper{
      *
      * @return \stdClass
      */
-    public function getConfigDataObject(){
+    public function getConfigDataObject()
+    {
         $config = new \stdClass();
         $config->domain = $this->getDomain();
         $config->clientId = $this->getClientId();
@@ -113,5 +124,4 @@ class Config extends AbstractHelper{
         $config->linkSelector = $this->getLinkSelector();
         return $config;
     }
-
 }

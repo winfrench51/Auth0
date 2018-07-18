@@ -9,20 +9,18 @@
  */
 namespace DavidUmoh\Auth0\Factory;
 
-class Auth0ClientFactory {
-
+class Auth0ClientFactory
+{
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
-
     /**
      * Instance name to create
      *
      * @var string
      */
     protected $_instanceName = null;
-
     /**
      * Factory constructor
      *
